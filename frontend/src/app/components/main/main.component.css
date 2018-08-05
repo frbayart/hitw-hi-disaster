@@ -1,0 +1,26 @@
+agm-map {
+    height: 519px;
+  }
+
+.overlap{
+  bottom: 519px;
+  position: relative;
+  left: 0px;
+} 
+
+.image
+{
+    display: block;
+    width: 692px;
+    height: 519px;
+    padding: 0px;
+}
+
+.blue {
+  background-color: rgb(19, 128, 197);
+  color: #FFFFFF;
+}
+
+.rowFixedSize {
+  height: 600px;
+}
