@@ -20,7 +20,7 @@ import numpy as np
 # model directory
 # tested rectangle sizes
 
-def suggestions(imgUrl, modelDir, sizes = (100, 50, 25, 12, 6)):
+def suggestions(imgUrl, modelDir = './model100relu', sizes = (100, 50, 25, 12, 6)):
 
 
   ### read an image, TODO READ FROM DB?
@@ -28,6 +28,8 @@ def suggestions(imgUrl, modelDir, sizes = (100, 50, 25, 12, 6)):
 
   ### Format a array of normalized [R,G,B]
   img1 = img.reshape(-1, 4)[:, 0:3]
+##  row_sums = img1.sum(axis=1)
+##  img1 = img1 / row_sums[:, np.newaxis]
   img1 = preprocessing.normalize(img1, norm='l1')
   #print(img1.shape)
 
