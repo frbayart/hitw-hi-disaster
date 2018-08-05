@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BackendService } from './backend.service';
 import { injectComponentFactoryResolver } from '@angular/core/src/render3';
 import { Observable } from 'rxjs';
-import { DisasterZone, Disaster, Suggestion, DisasterResult } from '../classes/disaster';
+import { DisasterZone, Disaster, Suggestion, DisasterResult, Win } from '../classes/disaster';
 import { of } from 'rxjs';
 
 @Injectable({
@@ -33,5 +33,8 @@ export class MockBackendService extends BackendService {
     return of(disasterResult);
   }
 
+  public abstract getWin(): Observable<Win> {
+    return of(new Win());
+  }
 
 }

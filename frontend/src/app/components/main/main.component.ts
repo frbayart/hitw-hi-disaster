@@ -1,5 +1,5 @@
 import { Component, OnInit, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
-import { DisasterZone, Disaster, DisasterResult, Suggestion } from '../../classes/disaster';
+import { DisasterZone, Disaster, DisasterResult, Suggestion, Hopital, Win } from '../../classes/disaster';
 import { BackendService } from '../../services/backend.service';
 import { HTTPBackendService } from '../../services/HTTPbackend.service';
 import { ComputeService } from '../../services/compute.service';
@@ -25,6 +25,7 @@ export class MainComponent implements OnInit, AfterViewInit {
   public context: CanvasRenderingContext2D;
 
   @ViewChild('basicModal') basicModal: ElementRef;
+  @ViewChild('winModal') winModal: ElementRef;
   public ICONS = ['./assets/icons/broken_road.png',
     './assets/icons/damaged_building.png',
     './assets/icons/trapped_ppl.png',
@@ -59,6 +60,7 @@ export class MainComponent implements OnInit, AfterViewInit {
   public currentDisaster = new Disaster();
   public currentPicture = 2;
   public viewerMode = false;
+  public hopitals = [] as Hopital[];
 
   constructor(private backendService: HTTPBackendService, private computeService: ComputeService,
     private activatedRoute: ActivatedRoute) {
@@ -71,6 +73,14 @@ export class MainComponent implements OnInit, AfterViewInit {
         });
       }
     });
+
+    this.backendService.getWin().subscribe(
+      (win: Win) => {
+        if (win.status === 'WIN') {
+          this.winModal.show();
+        }
+      }
+    );
   }
 
   ngOnInit() {
@@ -79,6 +89,33 @@ export class MainComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.context = (<HTMLCanvasElement>this.canvas.nativeElement).getContext('2d');
     this.updateZone();
+  }
+
+  autodetectHealthPlaces() {
+    const localGoogle = google;
+    const center = this.computeService.computeCenter(this.disasterZone);
+
+    this.agmMap['_mapsWrapper'].getNativeMap().then((map) => {
+      const placeService = new localGoogle.maps.places.PlacesService(map);
+
+      const position = new google.maps.LatLng(center[0], center[1]);
+      placeService.nearbySearch({
+        location: position,
+        radius: 5000,
+        type: ['hopital', 'health']
+      }, function (result, status) {
+        if (status !== 'OK') {
+          return;
+        }
+
+        result.forEach(element => {
+          if ((element.types.indexOf('health') > -1) || (element.types.indexOf('hopital') > -1)) {
+            console.log(element);
+          }
+        });
+      });
+    });
+
   }
 
   clear() {
@@ -179,9 +216,9 @@ export class MainComponent implements OnInit, AfterViewInit {
 
   drawSquare(x: number, y: number, width: number, height: number) {
     this.context.beginPath();
-    this.context.rect(x, y, width, height);
-    this.context.lineWidth = 5;
-    this.context.strokeStyle = 'black';
+    this.context.rect(y, x, width, height);
+    this.context.lineWidth = 1;
+    this.context.strokeStyle = 'DeepPink';
     this.context.stroke();
   }
 
@@ -224,7 +261,7 @@ export class MainComponent implements OnInit, AfterViewInit {
   }
 
   updateView() {
-    console.log('map ready');
+    this.autodetectHealthPlaces();
     const bounds: LatLngBounds = new google.maps.LatLngBounds();
 
     const offset = 0.000445;

@@ -50,7 +50,8 @@ export const ROUTES: Route[] = [
     BrowserModule,
     RouterModule.forRoot(ROUTES),
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyAGYUGG1GNsfr818v66O6gfRvyLgFnm2eQ'
+      apiKey: 'AIzaSyAGYUGG1GNsfr818v66O6gfRvyLgFnm2eQ',
+      libraries: ['places']
     }),
     HttpClientModule
   ],

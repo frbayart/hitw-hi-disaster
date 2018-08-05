@@ -18,6 +18,7 @@
           *ngFor="let disaster of disasters"></agm-marker>
         <agm-marker [iconUrl]="getIconUrl(disaster.type)" [latitude]="disaster.coordinates[0]" [longitude]="disaster.coordinates[1]"
           *ngFor="let disaster of disasterResults"></agm-marker>
+        <agm-marker [iconUrl]="getIconUrl(1)" [latitude]="hopital.coordinates[0]" [longitude]="hopital.coordinates[1]" *ngFor="let hopital of hopitals"></agm-marker>
       </agm-map>
     </div>
 
@@ -96,7 +97,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close pull-right" aria-label="Close" (click)="basicModal.hide()">
+        <button type="button" class="close pull-right" aria-label="Close" (click)="analysisModal.hide()">
           <span aria-hidden="true">×</span>
         </button>
         <h4 class="modal-title w-100" id="myModalLabel">Suggestion</h4>
@@ -111,6 +112,25 @@
         <button type="button" mdbBtn color="secondary" class="waves-light" aria-label="Close" (click)="analysisModal.hide()" mdbWavesEffect>Close</button>
         <button type="button" mdbBtn color="primary" class="relative waves-light" (click)="getSuggestion(); analysisModal.hide();"
           mdbWavesEffect>Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div mdbModal #winModal="mdbModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myBasicModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close pull-right" aria-label="Close" (click)="winModal.hide()">
+          <span aria-hidden="true">×</span>
+        </button>
+        <h4 class="modal-title w-100" id="myModalLabel">Suggestion</h4>
+      </div>
+      <div class="modal-body">
+        <h1>YOU WIN</h1>
+      </div>
+      <div class="modal-footer">
+        <button type="button" mdbBtn color="primary" class="relative waves-light" (click)="winModal.hide();" mdbWavesEffect>ok</button>
       </div>
     </div>
   </div>

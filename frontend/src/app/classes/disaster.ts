@@ -32,3 +32,11 @@ export class SuggestionResult {
 export class Suggestion {
     public results = [] as SuggestionResult[];
 }
+
+export class Hopital {
+    public coordinates = [0, 0];
+}
+
+export class Win {
+    public status = '';
+}

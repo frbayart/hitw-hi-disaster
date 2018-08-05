@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BackendService } from './backend.service';
-import { Disaster, DisasterResult, DisasterZone, Suggestion } from '../classes/disaster';
+import { Disaster, DisasterResult, DisasterZone, Suggestion, Win } from '../classes/disaster';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
@@ -38,6 +38,9 @@ export class HTTPBackendService extends BackendService {
         return this.http.get(route) as Observable<Suggestion>;
     }
 
+    public getWin(): Observable<Win> {
+        return this.http.get('http://10.20.0.52:5000/hd/biere') as Observable<Win>;
+    }
 
     public postDisasterPin(disasterZone: DisasterZone, disaster: Disaster): Observable<Disaster> {
         const regex = /<zid>/gi;
