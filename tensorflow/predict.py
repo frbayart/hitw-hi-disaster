@@ -27,7 +27,13 @@ def suggestions(imgUrl, modelDir = './model100relu', sizes = (100, 50, 25, 12, 6
   img = mpimg.imread(imgUrl)
 
   ### Format a array of normalized [R,G,B]
-  img1 = img.reshape(-1, 4)[:, 0:3]
+  if img.shape[2] == 3:
+    img1 = img.reshape(-1, 3)
+  elif img.shape[2] == 4:
+    img1 = img.reshape(-1, 4)[:, 0:3]
+  else:
+    print("tagueule")
+    return []
 ##  row_sums = img1.sum(axis=1)
 ##  img1 = img1 / row_sums[:, np.newaxis]
   img1 = preprocessing.normalize(img1, norm='l1')
@@ -110,7 +116,7 @@ def suggestions(imgUrl, modelDir = './model100relu', sizes = (100, 50, 25, 12, 6
 
 if __name__ == '__main__':
   #print(suggestions('./bigafter.png', './model100relu', sizes = (100, 50, 25, 12, 6)))
-  print(suggestions('/tmp/tmpmgagylig.png', './model100relu', sizes = (100, 50, 25, 12, 6)))
+  print(suggestions('../images/hiroshima-png/hiroshima-0-1.png', './model100relu', sizes = (100, 50, 25, 12, 6)))
 
 
 
