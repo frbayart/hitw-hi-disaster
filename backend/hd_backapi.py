@@ -4,11 +4,19 @@ import json
 import random
 import uuid
 import copy
+import sys
+import os
+from base64 import b64decode
+from tempfile import mkstemp
 from datetime import timedelta
 from six import string_types
 from functools import update_wrapper
 from flask import Flask, Response, request, make_response, current_app
 from flask_pymongo import PyMongo
+
+# bricolage pour importer le truc vite fait
+sys.path.append(os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), 'tensorflow'))
+from predict import suggestions
 
 
 app = Flask(__name__)
@@ -135,8 +143,32 @@ def get_disasters_per_zone(zid):
 @crossdomain(origin='*')
 def run_le_truc_intelligent(zid, disaster_type):
     results = {"results": []}
-    for r in mongo.db.suggestions.find({"zone_id": zid, "disaster_type": int(disaster_type)}, {'_id': 0}):
-        results["results"].append(r)
+    #for r in mongo.db.suggestions.find({"zone_id": zid, "disaster_type": int(disaster_type)}, {'_id': 0}):
+    #    results["results"].append(r)
+
+    # get image
+    img = mongo.db.disaster_zone.find_one({'id': zid}, {'image': 1, '_id': 0})['image']
+    img = img[img.find(';base64,')+8:]
+
+    fd, fname = mkstemp()
+    try:
+        os.write(fd, b64decode(img))
+        os.close(fd)
+        r = suggestions(fname, 
+                os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), 'tensorflow', 'model100relu'), sizes = (100, 50, 25, 12, 6))
+
+        for sug in r:
+            x1, y1, x2, y2, w = sug
+            results['results'].append({
+                'zone_id': zid,
+                'disaster_type': disaster_type,
+                'coordinates': [x1, y1, x2, y2],
+                'score': w
+                })
+
+    finally:
+        os.unlink(fname)
+
 
     return ok(results)
 
