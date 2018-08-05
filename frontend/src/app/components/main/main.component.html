@@ -1,0 +1,117 @@
+<!--/.Navbar-->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col"></div>
+    <div class="col">
+      <button type="button" mdbBtn color="primary" class="relative waves-light" (click)="analysisModal.show()" *ngIf="!viewerMode"
+        mdbWavesEffect>Show Analysis</button>
+      <button type="button" mdbBtn color="primary" class="relative waves-light" (click)="back()" mdbWavesEffect>Back</button>
+      <button type="button" mdbBtn color="primary" class="relative waves-light" (click)="next()" mdbWavesEffect>Next</button>
+      <button type="button" mdbBtn color="primary" class="relative waves-light" (click)="clear()" *ngIf="!viewerMode" mdbWavesEffect>Clear</button>
+    </div>
+  </div>
+  <div class="row rowFixedSize">
+    <div class="col">
+      <p>Google map view (before)</p>
+      <agm-map #agmMap [latitude]="latitude" [longitude]="longitude" mapTypeId="satellite">
+        <agm-marker [iconUrl]="getIconUrl(disaster.type)" [latitude]="disaster.coordinates[0]" [longitude]="disaster.coordinates[1]"
+          *ngFor="let disaster of disasters"></agm-marker>
+        <agm-marker [iconUrl]="getIconUrl(disaster.type)" [latitude]="disaster.coordinates[0]" [longitude]="disaster.coordinates[1]"
+          *ngFor="let disaster of disasterResults"></agm-marker>
+      </agm-map>
+    </div>
+
+    <div class="col">
+      <p>Picture (after) --- annotate this one kindly internaute :) image {{currentPicture}} / 16</p>
+      <div #div (click)="clickPicture($event)">
+        <img class="image" [src]="image" />
+        <canvas class="overlap image" #canvas width="692" height="519"></canvas>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<footer class="page-footer center-on-small-only pt-0 mt-5 fixed-bottom">
+  <div class="row">
+    <div class="col blue">
+      <img src='./assets/logo-blue.png' />
+    </div>
+    <div class="col blue">
+      <p>Handicap International est une organisation non gouvernementale (ONG) internationale qui mène des projets pour les
+        personnes handicapées dans une soixantaine de pays du Sud. L'organisation s'est spécialisée dans plusieurs champs
+        d'action. Nos équipes préviennent les causes de handicap, soignent les personnes handicapées et les accompagnent
+        sur le chemin vers leur autoonomie et leur inclusion dans la société. Nos équipes sont prêtes également à soutenir
+        les plus vulnérables - personnes handicapées, âgées, malades, les enfants, les femmes enceintes - quand survient
+        une urgence.</p>
+    </div>
+  </div>
+  <!--Copyright-->
+  <div class="footer-copyright">
+    <div class="container-fluid">
+      © 2018 Copyright:
+      <a href="https://www.toto-Elephant-clustering-project.io"> toto Elephant clustering project </a>
+    </div>
+  </div>
+  <!--/.Copyright-->
+</footer>
+
+
+<div mdbModal #basicModal="mdbModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myBasicModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close pull-right" aria-label="Close" (click)="basicModal.hide()">
+          <span aria-hidden="true">×</span>
+        </button>
+        <h4 class="modal-title w-100" id="myModalLabel">Disaster Properties</h4>
+      </div>
+      <div class="modal-body">
+        <p>Disaster type</p>
+        <select class="mdb-select" [(ngModel)]="currentDisaster.type">
+          <option value="" disabled selected>Choose your disaster type</option>
+          <option [value]="i" *ngFor="let disasterType of DISASTER_TYPES; let i = index">{{disasterType}}</option>
+        </select>
+        <p>Certainty degree</p>
+        <select class="mdb-select" [(ngModel)]="currentDisaster.severity">
+          <option value="" disabled selected>Choose your disaster type</option>
+          <option [value]="0">I had nothing better to do tonight</option>
+          <option [value]="1">Maybe ... but didn't pay attention</option>
+          <option [value]="2">My blind grandma agrees</option>
+          <option [value]="3">1200% sure - full stack</option>
+          <option [value]="4">OMGWTF!!!1! If it's wrong, I'll cut one of my balls</option>
+        </select>
+      </div>
+      <div class="modal-footer">
+        <button type="button" mdbBtn color="secondary" class="waves-light" aria-label="Close" (click)="basicModal.hide()" mdbWavesEffect>Close</button>
+        <button type="button" mdbBtn color="primary" class="relative waves-light" (click)="saveCurrentDisaster()" mdbWavesEffect>Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div mdbModal #analysisModal="mdbModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myBasicModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close pull-right" aria-label="Close" (click)="basicModal.hide()">
+          <span aria-hidden="true">×</span>
+        </button>
+        <h4 class="modal-title w-100" id="myModalLabel">Suggestion</h4>
+      </div>
+      <div class="modal-body">
+        <select class="mdb-select" [(ngModel)]="disasterType">
+          <option value="" disabled selected>Choose your disaster type</option>
+          <option [value]="i" *ngFor="let disasterType of DISASTER_TYPES; let i = index">{{disasterType}}</option>
+        </select>
+      </div>
+      <div class="modal-footer">
+        <button type="button" mdbBtn color="secondary" class="waves-light" aria-label="Close" (click)="analysisModal.hide()" mdbWavesEffect>Close</button>
+        <button type="button" mdbBtn color="primary" class="relative waves-light" (click)="getSuggestion(); analysisModal.hide();"
+          mdbWavesEffect>Save</button>
+      </div>
+    </div>
+  </div>
+</div>
