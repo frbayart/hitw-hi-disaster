@@ -6,6 +6,7 @@ import uuid
 import copy
 import sys
 import os
+import time
 from base64 import b64decode
 from tempfile import mkstemp
 from datetime import timedelta
@@ -173,13 +174,19 @@ def run_le_truc_intelligent(zid, disaster_type):
     return ok(results)
 
 
-
 @app.route('/', methods=['GET'])
 def slash():
     resp = Response("hi disaster")
     resp.headers["Content-Type"] = "text/plain"
     return resp
 
+
+@app.route("/hd/biere", methods=['GET', 'OPTIONS'])
+@crossdomain(origin='*')
+def biere():
+    if not int(time.time()) % 10:
+        return ok({"status": "WIN"})
+    return ok({"status": "FAILED"})
 
 
 if __name__ == '__main__':
