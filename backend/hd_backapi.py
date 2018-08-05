@@ -1,10 +1,11 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 import json
 import random
 import uuid
 import copy
 from datetime import timedelta
+from six import string_types
 from functools import update_wrapper
 from flask import Flask, Response, request, make_response, current_app
 from flask_pymongo import PyMongo
@@ -28,9 +29,9 @@ def crossdomain(origin=None, methods=None, headers=None,
                 automatic_options=True):
     if methods is not None:
         methods = ', '.join(sorted(x.upper() for x in methods))
-    if headers is not None and not isinstance(headers, basestring):
+    if headers is not None and not isinstance(headers, string_types):
         headers = ', '.join(x.upper() for x in headers)
-    if not isinstance(origin, basestring):
+    if not isinstance(origin, string_types):
         origin = ', '.join(origin)
     if isinstance(max_age, timedelta):
         max_age = max_age.total_seconds()
@@ -84,8 +85,8 @@ def disaster_zone(zid):
 @crossdomain(origin='*', headers="*")
 def create_disaster(zid):
     try:
-        data = json.loads(request.data)
-    except ValueError, e:
+        data = json.loads(request.data.decode('utf-8'))
+    except ValueError as e:
         return error(500, "invalid json %s"%str(e))
 
     data["zone_id"] = zid
