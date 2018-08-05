@@ -36,7 +36,7 @@ def suggestions(imgUrl, modelDir, sizes = (100, 50, 25, 12, 6)):
   graph = tf.get_default_graph()
   
   ## restore the model and features/prediction tensors
-  tf.saved_model.loader.load(sess, [tf.saved_model.tag_constants.SERVING], './model100relu')
+  tf.saved_model.loader.load(sess, [tf.saved_model.tag_constants.SERVING], modelDir)
   features_placeholder = graph.get_tensor_by_name("features_placeholder:0")
   pred = graph.get_tensor_by_name("pred:0")
 
@@ -107,7 +107,8 @@ def suggestions(imgUrl, modelDir, sizes = (100, 50, 25, 12, 6)):
 
 
 if __name__ == '__main__':
-  print(suggestions('./bigafter.png', './model100relu', sizes = (100, 50, 25, 12, 6)))
+  #print(suggestions('./bigafter.png', './model100relu', sizes = (100, 50, 25, 12, 6)))
+  print(suggestions('/tmp/tmpmgagylig.png', './model100relu', sizes = (100, 50, 25, 12, 6)))
 
 
 
