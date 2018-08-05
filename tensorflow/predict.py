@@ -1,11 +1,19 @@
 #!/usr/bin/env python3
 
+# 'fix' for
+# /usr/lib/python3.5/importlib/_bootstrap.py:222: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
+# return f(*args, **kwds)
+#
+import warnings
+warnings.filterwarnings("ignore")
+
 import matplotlib.image as mpimg
 import tensorflow as tf
 from tensorflow.python.saved_model import tag_constants
 from PIL import Image
 from sklearn import preprocessing
 import numpy as np
+
 
 #
 # input image
