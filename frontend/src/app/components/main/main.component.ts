@@ -77,7 +77,7 @@ export class MainComponent implements OnInit, AfterViewInit {
     this.backendService.getWin().subscribe(
       (win: Win) => {
         if (win.status === 'WIN') {
-          this.winModal.show();
+          this.winModal['show']();
         }
       }
     );

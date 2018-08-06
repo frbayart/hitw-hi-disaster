@@ -33,7 +33,7 @@ export class MockBackendService extends BackendService {
     return of(disasterResult);
   }
 
-  public abstract getWin(): Observable<Win> {
+  public getWin(): Observable<Win> {
     return of(new Win());
   }
 
