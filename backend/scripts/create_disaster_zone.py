@@ -6,8 +6,8 @@ from pymongo import MongoClient
 
 mongo = MongoClient("mongodb://localhost:27017/hd")
 
-with open('penis') as penis:
-    data = penis.read().split('\n\n')
+with open('images_coordinates.txt') as fd:
+    data = fd.read().split('\n\n')
 
     i = 0
 

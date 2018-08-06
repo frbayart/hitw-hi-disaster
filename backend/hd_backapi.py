@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 
 import json
-import random
 import uuid
 import copy
 import sys
